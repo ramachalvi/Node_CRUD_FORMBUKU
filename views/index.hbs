@@ -1,0 +1,154 @@
+  <html>
+
+  <head>
+      <meta charset="utf-8">
+      <title>CRUD Node.js and Mysql</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .table{
+            text-align: center;
+            size: 18px;
+            background: linear-gradient(rgb(255, 166, 0), #f02ebc, #a12af0, rgb(138, 223, 223))
+        }
+    </style>
+  </head>
+
+  <body>
+      <div class="container mt-4">
+          <h2>Form Data Buku</h2>
+          <div class="text-right my-2">
+              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addPostModal">
+                  Buku Baru
+              </button>
+          </div>
+          <div class="my-2">
+              <table class="table">
+                  <thead>
+                      <tr>
+                          <th>ID</th>
+                          <td>Judul</td>
+                          <td>Pengarang</td>
+                          <td>Tanggal Input</td>
+                          <td>Aksi</td>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {{#each posts}}
+                      <tr>
+                          <td>{{ id }}</td>
+                          <td>{{ title }}</td>
+                          <td>{{ content }}</td>
+                          <td>{{ created_at }}</td>
+                          <td>
+                              <button type="button" class="btn btn-info btn-sm m-1 edit-post" data-id="{{ id }}" data-title="{{ title }}" data-content="{{ content }}">Update</button>
+                              <button type="button" class="btn btn-warning btn-sm m-1 delete-post" data-id="{{ id }}">Hapus</button>
+                          </td>
+                      </tr>
+                      {{/each}}
+                  </tbody>
+              </table>
+          </div>
+      </div>
+
+      <div id="addPostModal" class="modal fade">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h4 class="modal-title">Tambah Buku Baru</h4>
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+                  <div class="modal-body">
+                      <form action="/posts" method="POST">
+                          <div class="form-group">
+                              <label for="title">Judul</label>
+                              <input type="text" class="form-control" name="title" id="title" >
+                          </div>
+                          <div class="form-group">
+                              <label for="content">Pengarang</label>
+                              <input type="text" name="content" id="content" class="form-control" rows="2">
+                          </div>
+                          <div class="form-group text-center">
+                              <button class="btn btn-dark" type="submit">Simpan Buku</button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <div id="editPostModal" class="modal fade">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <div class="modal-title">Update</div>
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+                  <div class="modal-body">
+                      <form action="/posts/edit" method="POST">
+                          <input type="hidden" name="id" id="edit_id">
+                          <div class="form-group">
+                              <label for="edit_title">Judul</label>
+                              <input type="text" class="form-control" name="title" id="edit_title" rows="2">
+                          </div>
+                          <div class="form-group">
+                              <label for="edit_content">Pengarang</label>
+                              <input type="text" name="content" id="edit_content" class="form-control" rows="2">
+                          <div class="form-group text-center">
+                              <button class="btn btn-primary" type="submit">Update Buku</button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <div id="deletePostModal" class="modal fade">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <div class="modal-title">Hapus Data Buku</div>
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+                  <div class="modal-body">
+                      <form action="/posts/delete" method="POST">
+                          <div class="form-group">
+                              <p>Apakah anda yakin ingin menghapus data buku ini ?</p>
+                              <input type="hidden" id="delete_id" name="id">
+                          </div>
+                          <div class="form-group text-center">
+                              <button class="btn btn-danger" type="submit">Hapus Buku</button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+      
+      <script>
+          $('.edit-post').on('click', function () {
+              var id = $(this).data('id')
+              var title = $(this).data('title')
+              var content = $(this).data('content')
+
+              $('#editPostModal').modal('show')
+              
+              $('#edit_id').val(id)
+              $('#edit_title').val(title)
+              $('#edit_content').val(content)
+          })
+
+          $('.delete-post').on('click', function () {
+              var id = $(this).data('id')
+
+              $('#deletePostModal').modal('show')
+
+              $('#delete_id').val(id)
+          })
+      </script>
+  </body>
+
+  </html>
